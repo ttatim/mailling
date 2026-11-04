@@ -3,3 +3,4 @@
 .cta .btn{background:#d83b3b!important;color:#fff!important}
 .cta .btn:hover{background:#b92727!important}
 .logo-brand{display:flex;align-items:center}.logo-brand img{width:140px;height:auto;background:#fff;border-radius:6px;padding:3px}.footer-logo{width:105px;vertical-align:middle;background:#fff;border-radius:4px;padding:2px}
+.smtp-actions{display:flex;gap:12px;align-items:center;margin-top:18px}.smtp-actions form{margin:0}@media(max-width:520px){.smtp-actions{align-items:stretch;flex-direction:column}.smtp-actions button{width:100%}}
