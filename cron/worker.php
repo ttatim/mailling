@@ -7,6 +7,7 @@ require dirname(__DIR__) . '/app/Core/Autoloader.php';
 
 $config = require dirname(__DIR__) . '/config.php';
 $db = \App\Core\Database::connect($config);
+(new \App\Services\BillingCycle(new \App\Models\Repositories\BillingRepository($db),new \App\Services\PagSeguroClient($config['billing']),new \App\Services\PlatformMailer($config),$config['app']))->run();
 (new \App\Services\AccountLifecycle($db))->notifyUpcoming();
 (new \App\Services\AccountLifecycle($db))->closeDue();
 (new \App\Services\AccountLifecycle($db))->closeSingleUse();

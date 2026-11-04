@@ -1,0 +1,6 @@
+<?php
+declare(strict_types=1);
+namespace App\Services;
+use App\Models\Repositories\BillingRepository;
+final class BillingCycle {public function __construct(private BillingRepository $repo,private PagSeguroClient $client,private PlatformMailer $mailer,private array $app){}
+ public function run():void{foreach($this->repo->cancellableSubscriptions() as $s){try{$this->client->cancelSubscription($s['provider_reference']);$this->repo->markProviderCancelled((int)$s['id']);}catch(\Throwable $e){error_log('PagSeguro cancel: '.$e->getMessage());}}foreach($this->repo->dueInvoices() as $s){try{$ref='MLG-'.$s['user_id'].'-'.bin2hex(random_bytes(8));$r=$this->client->createCheckout(['reference_id'=>$ref,'items'=>[['name'=>$s['name'],'quantity'=>1,'unit_amount'=>(int)$s['amount_cents']]],'notification_urls'=>[rtrim($this->app['url'],'/').'/webhooks/pagamentos']]);$url=$r['links'][0]['href']??$r['payment_url']??null;if(!$url)throw new \RuntimeException('Checkout sem link');$this->repo->invoice((int)$s['id'],$ref,$url,(int)$s['amount_cents']);$this->mailer->send($s['email'],'Seu pagamento está disponível','<p>Seu pagamento vence em 10 dias: <a href="'.htmlspecialchars($url,ENT_QUOTES,'UTF-8').'">pagar agora</a>.</p>');}catch(\Throwable $e){error_log('Billing cycle: '.$e->getMessage());}}}}
