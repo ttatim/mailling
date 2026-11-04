@@ -17,6 +17,7 @@ $config = require __DIR__ . '/config.php';
 Session::start($config['security']['session_name']);
 header('X-Content-Type-Options: nosniff'); header('X-Frame-Options: DENY'); header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'");
 $app = new AppController(); $router = new Router();
+$router->before([$app,'enforceAccess']);
 $health = new HealthController($config);
 $router->get('/', [$app,'home']); $router->get('/login',[$app,'loginForm']);$router->post('/login',[$app,'login']);$router->get('/cadastro',[$app,'registerForm']);$router->post('/cadastro',[$app,'register']);$router->post('/sair',[$app,'logout']);
 $router->get('/termos',[$app,'terms']);$router->get('/privacidade',[$app,'privacy']);
