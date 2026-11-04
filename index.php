@@ -14,7 +14,7 @@ require __DIR__ . '/app/Core/Autoloader.php';
 Autoloader::register(__DIR__);
 
 $config = require __DIR__ . '/config.php';
-set_exception_handler(static function (Throwable $e): void { error_log($e->getMessage()); http_response_code(500); header('Content-Type: text/html; charset=UTF-8'); echo '<h1>Ocorreu um erro inesperado</h1><p>Tente novamente mais tarde.</p>'; });
+set_exception_handler(static function (Throwable $e) use ($config): void { $id='indisponível';try{$id=(new \App\Services\ErrorReporter(\App\Core\Database::connect($config),$config))->report(500,$e);}catch(\Throwable){error_log($e->getMessage());}http_response_code(500);header('Content-Type: text/html; charset=UTF-8');echo '<!doctype html><title>Erro temporário</title><main><h1>Não foi possível concluir esta ação</h1><p>Nossa equipe foi notificada. Informe o código <strong>'.htmlspecialchars($id,ENT_QUOTES,'UTF-8').'</strong> ao suporte.</p></main>'; });
 Session::start($config['security']['session_name']);
 header('X-Content-Type-Options: nosniff'); header('X-Frame-Options: DENY'); header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'");
 $app = new AppController(); $router = new Router();

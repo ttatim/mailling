@@ -1,0 +1,5 @@
+<?php
+declare(strict_types=1);
+namespace App\Services;
+use PDO;
+final class ErrorReporter {public function __construct(private PDO $db,private array $config){}public function report(int $status,\Throwable $e):string{$id=bin2hex(random_bytes(12));$s=$this->db->prepare('INSERT INTO system_errors(error_id,severity,http_status,route,message,context,notified_at) VALUES(:id,:sev,:status,:route,:msg,:ctx,NOW())');$s->execute(['id'=>$id,'sev'=>$status>=500?'5xx':'4xx','status'=>$status,'route'=>$_SERVER['REQUEST_URI']??'/','msg'=>substr($e->getMessage(),0,1000),'ctx'=>json_encode(['ip'=>$_SERVER['REMOTE_ADDR']??null])]);$tg=$this->config['telegram']??[];if(($tg['bot_token']??'')&&($tg['chat_id']??'')){$url='https://api.telegram.org/bot'.$tg['bot_token'].'/sendMessage';$h=curl_init($url);curl_setopt_array($h,[CURLOPT_POST=>true,CURLOPT_POSTFIELDS=>['chat_id'=>$tg['chat_id'],'text'=>"[Mailing {$status}] {$id}\n".($_SERVER['REQUEST_URI']??'/')],CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>5]);curl_exec($h);curl_close($h);}return$id;}}

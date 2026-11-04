@@ -15,5 +15,6 @@ return [
         'username' => 'root', 'password' => '', 'charset' => 'utf8mb4',
     ],
     'security' => ['session_name' => 'mailling_session'],
+    'telegram' => ['bot_token' => '', 'chat_id' => ''],
     'billing' => ['gateway' => 'pagseguro', 'environment' => 'sandbox', 'token' => 'CHANGE-ME', 'webhook_secret' => 'CHANGE-ME'],
 ];
