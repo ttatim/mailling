@@ -19,6 +19,7 @@ $app = new AppController(); $router = new Router();
 $router->get('/', [$app,'home']); $router->get('/login',[$app,'loginForm']);$router->post('/login',[$app,'login']);$router->get('/cadastro',[$app,'registerForm']);$router->post('/cadastro',[$app,'register']);$router->post('/sair',[$app,'logout']);
 $router->get('/painel',[$app,'dashboard']);$router->get('/contatos',[$app,'contacts']);$router->post('/contatos/importar',[$app,'import']);$router->post('/contatos/excluir',[$app,'deleteContact']);
 $router->get('/configuracoes',[$app,'settings']);$router->post('/configuracoes/cancelar',[$app,'cancel']);
+$router->post('/configuracoes/smtp',[$app,'senderSave']);
 $router->get('/campanhas/nova',[$app,'campaignForm']);$router->post('/campanhas',[$app,'campaignCreate']);$router->post('/campanhas/finalizar',[$app,'campaignFinalize']);$router->post('/campanhas/status',[$app,'campaignStatus']);
 $router->get('/descadastro',[$app,'optoutForm']);$router->post('/descadastro',[$app,'optout']);
 $router->get('/admin',[$app,'admin']);$router->post('/admin/bloquear',[$app,'adminBlock']);$router->post('/admin/desbloquear',[$app,'adminUnblock']);$router->post('/webhooks/pagamentos',[$app,'webhook']);
