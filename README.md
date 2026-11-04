@@ -26,6 +26,8 @@ Micro SaaS de e-mail marketing em PHP 8.3 puro, sem framework, Composer ou depen
 
 Requisitos: PHP 8.3, MySQL 8.0+, extensões `pdo_mysql`, `openssl`, `zip` e `curl`.
 
+Consulte [DEPLOYMENT.md](DEPLOYMENT.md) para homologação, callback do PagSeguro, cron e checagem de saúde.
+
 Execute `php tests/run.php` para os testes sem PHPUnit. Para o worker: `* * * * * php /caminho/cron/worker.php`.
 
 O super-admin inicial é criado pelo seed e acessa `/admin`. A URL de callback é `POST /webhooks/pagamentos`; ela requer o cabeçalho `X-Webhook-Signature` com HMAC-SHA256 do corpo usando `billing.webhook_secret`. Eventos aprovados desbloqueiam automaticamente o usuário relacionado à referência de pagamento.
