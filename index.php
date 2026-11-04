@@ -30,6 +30,7 @@ $router->get('/notificacoes',[$app,'notifications']);
 $router->get('/contatos/exportar',[$app,'exportContacts']);
 $router->get('/configuracoes',[$app,'settings']);$router->post('/configuracoes/cancelar',[$app,'cancel']);
 $router->post('/configuracoes/smtp',[$app,'senderSave']);
+$router->post('/configuracoes/smtp-teste',[$app,'smtpTest']);
 $router->get('/campanhas/nova',[$app,'campaignForm']);$router->post('/campanhas',[$app,'campaignCreate']);$router->post('/campanhas/finalizar',[$app,'campaignFinalize']);$router->post('/campanhas/status',[$app,'campaignStatus']);
 $router->get('/descadastro',[$app,'optoutForm']);$router->post('/descadastro',[$app,'optout']);
 $router->get('/admin',[$app,'admin']);$router->post('/admin/bloquear',[$app,'adminBlock']);$router->post('/admin/desbloquear',[$app,'adminUnblock']);$router->post('/webhooks/pagamentos',[$app,'webhook']);
