@@ -1,0 +1,5 @@
+<?php
+declare(strict_types=1);
+namespace App\Services;
+use PDO;
+final class RateLimiter {public function __construct(private PDO $db){} public function allow(string $action,string $identifier,int $max=5,int $minutes=15):bool{$hash=hash('sha256',strtolower($identifier));$this->db->prepare('DELETE FROM rate_limits WHERE window_started_at<DATE_SUB(NOW(),INTERVAL :m MINUTE)')->execute(['m'=>$minutes]);$s=$this->db->prepare('SELECT id,attempts,blocked_until FROM rate_limits WHERE action=:a AND identifier_hash=:h ORDER BY id DESC LIMIT 1');$s->execute(['a'=>$action,'h'=>$hash]);$r=$s->fetch();if($r&&$r['blocked_until']&&strtotime($r['blocked_until'])>time())return false;if(!$r){$i=$this->db->prepare('INSERT INTO rate_limits(action,identifier_hash,window_started_at) VALUES(:a,:h,NOW())');$i->execute(['a'=>$action,'h'=>$hash]);return true;}$count=(int)$r['attempts']+1;$u=$this->db->prepare('UPDATE rate_limits SET attempts=:n,blocked_until=IF(:n>:max,DATE_ADD(NOW(),INTERVAL :m MINUTE),NULL) WHERE id=:id');$u->execute(['n'=>$count,'max'=>$max,'m'=>$minutes,'id'=>$r['id']]);return $count<=$max;}}

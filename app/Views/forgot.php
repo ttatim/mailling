@@ -1,0 +1,1 @@
+<?php ob_start(); ?><div class="card narrow"><h1>Recuperar senha</h1><form method="post"><input type="hidden" name="_csrf" value="<?=$csrf?>"><label>E-mail<input type="email" name="email" required></label><button class="btn">Enviar link</button></form></div><?php $body=ob_get_clean();$title='Recuperar senha';require __DIR__.'/layout.php'; ?>

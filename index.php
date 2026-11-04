@@ -17,6 +17,8 @@ Session::start($config['security']['session_name']);
 header('X-Content-Type-Options: nosniff'); header('X-Frame-Options: DENY'); header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'");
 $app = new AppController(); $router = new Router();
 $router->get('/', [$app,'home']); $router->get('/login',[$app,'loginForm']);$router->post('/login',[$app,'login']);$router->get('/cadastro',[$app,'registerForm']);$router->post('/cadastro',[$app,'register']);$router->post('/sair',[$app,'logout']);
+$router->get('/esqueci-senha',[$app,'forgotForm']);$router->post('/esqueci-senha',[$app,'forgot']);$router->get('/redefinir',[$app,'resetForm']);$router->post('/redefinir',[$app,'reset']);
+$router->get('/ativar',[$app,'activate']);
 $router->get('/painel',[$app,'dashboard']);$router->get('/contatos',[$app,'contacts']);$router->post('/contatos/importar',[$app,'import']);$router->post('/contatos/excluir',[$app,'deleteContact']);
 $router->get('/configuracoes',[$app,'settings']);$router->post('/configuracoes/cancelar',[$app,'cancel']);
 $router->post('/configuracoes/smtp',[$app,'senderSave']);
