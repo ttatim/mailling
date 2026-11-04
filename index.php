@@ -37,5 +37,7 @@ $router->post('/configuracoes/smtp-teste',[$app,'smtpTest']);
 $router->get('/campanhas/nova',[$app,'campaignForm']);$router->post('/campanhas',[$app,'campaignCreate']);$router->post('/campanhas/finalizar',[$app,'campaignFinalize']);$router->post('/campanhas/status',[$app,'campaignStatus']);
 $router->get('/descadastro',[$app,'optoutForm']);$router->post('/descadastro',[$app,'optout']);
 $router->get('/admin',[$app,'admin']);$router->post('/admin/bloquear',[$app,'adminBlock']);$router->post('/admin/desbloquear',[$app,'adminUnblock']);$router->post('/webhooks/pagamentos',[$app,'webhook']);
+$router->post('/admin/status',[$app,'adminStatus']);$router->post('/admin/liberar-acesso',[$app,'adminGrant']);
+$router->post('/admin/usuarios',[$app,'adminCreate']);
 $router->get('/admin/logs',[$app,'adminLogs']);
 $router->dispatch(new Request());
