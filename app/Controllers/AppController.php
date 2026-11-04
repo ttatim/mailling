@@ -27,6 +27,7 @@ final class AppController {private UserRepository $users;private ContactReposito
  public function enforceAccess(Request $r):void{$public=['/','/login','/cadastro','/planos','/esqueci-senha','/redefinir','/ativar','/descadastro','/termos','/privacidade','/health','/webhooks/pagamentos'];if(in_array($r->path(),$public,true))return;if(!Session::userId())Response::redirect('/login');if(in_array($r->path(),['/checkout','/configuracoes','/configuracoes/smtp','/configuracoes/smtp-teste','/configuracoes/cancelar'],true))return;if(!$this->users->canUseApp((int)Session::userId()))Response::redirect('/planos');}
  public function admin():never{$this->superAdmin();$this->render('admin',['data'=>$this->admin->overview()]);}
  public function adminLogs():never{$this->superAdmin();$this->render('admin_logs',['logs'=>$this->admin->logs()]);}
+ public function adminUsers():never{$this->superAdmin();$this->render('admin_users',['users'=>$this->admin->overview()['users']]);}
  public function adminBlock(Request $r):never{$this->superAdmin();$this->csrf($r);$this->admin->block((int)$r->input('user_id'),trim((string)$r->input('reason'))?:'Inadimplência');Response::redirect('/admin');}
  public function adminUnblock(Request $r):never{$this->superAdmin();$this->csrf($r);$this->admin->unblock((int)$r->input('user_id'));Response::redirect('/admin');}
  public function adminStatus(Request $r):never{$this->superAdmin();$this->csrf($r);$this->admin->setUserStatus((int)$r->input('user_id'),(string)$r->input('status'));Response::redirect('/admin');}

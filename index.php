@@ -40,4 +40,5 @@ $router->get('/admin',[$app,'admin']);$router->post('/admin/bloquear',[$app,'adm
 $router->post('/admin/status',[$app,'adminStatus']);$router->post('/admin/liberar-acesso',[$app,'adminGrant']);
 $router->post('/admin/usuarios',[$app,'adminCreate']);
 $router->get('/admin/logs',[$app,'adminLogs']);
+$router->get('/admin/usuarios',[$app,'adminUsers']);
 $router->dispatch(new Request());
