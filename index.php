@@ -20,6 +20,7 @@ $router->get('/', [$app,'home']); $router->get('/login',[$app,'loginForm']);$rou
 $router->get('/esqueci-senha',[$app,'forgotForm']);$router->post('/esqueci-senha',[$app,'forgot']);$router->get('/redefinir',[$app,'resetForm']);$router->post('/redefinir',[$app,'reset']);
 $router->get('/ativar',[$app,'activate']);
 $router->get('/painel',[$app,'dashboard']);$router->get('/contatos',[$app,'contacts']);$router->post('/contatos/importar',[$app,'import']);$router->post('/contatos/excluir',[$app,'deleteContact']);
+$router->get('/planos',[$app,'plans']);$router->post('/checkout',[$app,'checkout']);
 $router->get('/contatos/exportar',[$app,'exportContacts']);
 $router->get('/configuracoes',[$app,'settings']);$router->post('/configuracoes/cancelar',[$app,'cancel']);
 $router->post('/configuracoes/smtp',[$app,'senderSave']);
