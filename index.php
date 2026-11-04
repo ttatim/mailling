@@ -14,6 +14,7 @@ require __DIR__ . '/app/Core/Autoloader.php';
 Autoloader::register(__DIR__);
 
 $config = require __DIR__ . '/config.php';
+set_exception_handler(static function (Throwable $e): void { error_log($e->getMessage()); http_response_code(500); header('Content-Type: text/html; charset=UTF-8'); echo '<h1>Ocorreu um erro inesperado</h1><p>Tente novamente mais tarde.</p>'; });
 Session::start($config['security']['session_name']);
 header('X-Content-Type-Options: nosniff'); header('X-Frame-Options: DENY'); header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'");
 $app = new AppController(); $router = new Router();
