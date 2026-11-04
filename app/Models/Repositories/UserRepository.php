@@ -13,4 +13,5 @@ final class UserRepository {
  public function useToken(string $token,string $purpose):?array{$s=$this->db->prepare('SELECT * FROM auth_tokens WHERE token_hash=:t AND purpose=:p AND used_at IS NULL AND expires_at>NOW() LIMIT 1');$s->execute(['t'=>hash('sha256',$token),'p'=>$purpose]);$r=$s->fetch();if(!$r)return null;$this->db->prepare('UPDATE auth_tokens SET used_at=NOW() WHERE id=:id')->execute(['id'=>$r['id']]);return $r;}
  public function resetPassword(int $id,string $hash):void{$s=$this->db->prepare('UPDATE users SET password_hash=:p WHERE id=:id');$s->execute(['p'=>$hash,'id'=>$id]);}
  public function notifications(int $id):array{$s=$this->db->prepare('SELECT * FROM user_notifications WHERE user_id=:id ORDER BY created_at DESC LIMIT 100');$s->execute(['id'=>$id]);return$s->fetchAll();}
+ public function canUseApp(int $id):bool{$u=$this->find($id);return $u&&($u['role']==='super_admin'||$this->activeSubscription($id));}
 }
