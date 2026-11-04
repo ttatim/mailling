@@ -1,4 +1,4 @@
-# Mailing
+# Mail360
 
 Micro SaaS de e-mail marketing em PHP 8.3 puro, sem framework, Composer ou dependências externas.
 

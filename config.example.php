@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'app' => [
-        'name' => 'Mailing',
+        'name' => 'Mail360',
         'url' => 'http://localhost:8000',
         'environment' => 'local',
         'encryption_key' => 'GERE_UMA_CHAVE_ALEATORIA_DE_32_BYTES_EM_BASE64',
