@@ -11,6 +11,7 @@ $db = \App\Core\Database::connect($config);
 (new \App\Services\AccountLifecycle($db))->notifyUpcoming();
 (new \App\Services\AccountLifecycle($db))->closeDue();
 (new \App\Services\AccountLifecycle($db))->closeSingleUse();
+(new \App\Services\AccountLifecycle($db))->purgeExpired();
 // Lock a single due batch; SKIP LOCKED lets concurrent cron invocations coexist safely.
 $db->beginTransaction();
 $batch = $db->query("SELECT b.* FROM campaign_batches b JOIN campaigns c ON c.id=b.campaign_id WHERE b.status='pending' AND b.scheduled_at<=NOW() AND c.status IN ('queued','running') ORDER BY b.scheduled_at LIMIT 1 FOR UPDATE SKIP LOCKED")->fetch();
