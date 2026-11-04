@@ -13,4 +13,6 @@ final class Response
         echo $content;
         exit;
     }
+    public static function redirect(string $path): never { header('Location: ' . $path, true, 302); exit; }
+    public static function json(array $data): never { header('Content-Type: application/json'); echo json_encode($data, JSON_THROW_ON_ERROR); exit; }
 }

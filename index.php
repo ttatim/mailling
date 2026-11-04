@@ -6,12 +6,18 @@ use App\Core\Autoloader;
 use App\Core\Request;
 use App\Core\Response;
 use App\Core\Router;
+use App\Core\Session;
+use App\Controllers\AppController;
 
 require __DIR__ . '/app/Core/Autoloader.php';
 Autoloader::register(__DIR__);
 
-$router = new Router();
-$router->get('/', static function (): void {
-    Response::html('<!doctype html><html lang="pt-BR"><body><h1>Mailing</h1><p>Fundação técnica em preparação.</p></body></html>');
-});
+$config = require __DIR__ . '/config.php';
+Session::start($config['security']['session_name']);
+header('X-Content-Type-Options: nosniff'); header('X-Frame-Options: DENY'); header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'");
+$app = new AppController(); $router = new Router();
+$router->get('/', [$app,'home']); $router->get('/login',[$app,'loginForm']);$router->post('/login',[$app,'login']);$router->get('/cadastro',[$app,'registerForm']);$router->post('/cadastro',[$app,'register']);$router->post('/sair',[$app,'logout']);
+$router->get('/painel',[$app,'dashboard']);$router->get('/contatos',[$app,'contacts']);$router->post('/contatos/importar',[$app,'import']);$router->post('/contatos/excluir',[$app,'deleteContact']);
+$router->get('/campanhas/nova',[$app,'campaignForm']);$router->post('/campanhas',[$app,'campaignCreate']);$router->post('/campanhas/finalizar',[$app,'campaignFinalize']);$router->post('/campanhas/status',[$app,'campaignStatus']);
+$router->get('/descadastro',[$app,'optoutForm']);$router->post('/descadastro',[$app,'optout']);
 $router->dispatch(new Request());

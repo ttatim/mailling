@@ -2,12 +2,12 @@
 
 Micro SaaS de e-mail marketing em PHP 8.3 puro, sem framework, Composer ou dependências externas.
 
-## Primeira etapa entregue
+## Implementação
 
 - Estrutura PSR-4 simplificada e autoloader próprio.
 - Front controller e regras Apache para rotas amigáveis.
 - Schema MySQL 8 completo em `migrations/001_initial_schema.sql`.
-- Base segura para credenciais, filas, opt-out global, auditoria, billing e rate limiting.
+- Base segura para credenciais, filas, opt-out global, auditoria, billing e rate limiting, com landing, cadastro/login, contatos e campanhas.
 
 ## Decisões de schema para validação
 
@@ -25,4 +25,6 @@ Micro SaaS de e-mail marketing em PHP 8.3 puro, sem framework, Composer ou depen
 
 Requisitos: PHP 8.3, MySQL 8.0+, extensões `pdo_mysql`, `openssl`, `zip` e `curl`.
 
-As telas e o worker serão adicionados após a validação deste schema, conforme o briefing.
+Execute `php tests/run.php` para os testes sem PHPUnit. Para o worker: `* * * * * php /caminho/cron/worker.php`.
+
+O visual é inspirado na organização de painel do Sufee, porém foi implementado com HTML/CSS próprios, evitando dependências externas. Importadores binários DOC/XLS e PDFs complexos têm limitação deliberada: extraem texto bruto/fluxos simples; DOCX/XLSX usam XML do ZIP.

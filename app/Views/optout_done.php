@@ -1,0 +1,1 @@
+<?php ob_start(); ?><div class="card narrow"><h1>Pronto</h1><p><?= $status==='done'?'Seu endereço foi descadastrado.':($status==='already'?'Você já estava descadastrado.':'Link de descadastro inválido ou expirado.') ?></p></div><?php $body=ob_get_clean();$title='Descadastro';require __DIR__.'/layout.php'; ?>

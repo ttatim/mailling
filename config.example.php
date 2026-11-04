@@ -8,6 +8,7 @@ return [
         'url' => 'http://localhost:8000',
         'environment' => 'local',
         'encryption_key' => 'GERE_UMA_CHAVE_ALEATORIA_DE_32_BYTES_EM_BASE64',
+        'default_hourly_limit' => 30,
     ],
     'database' => [
         'host' => '127.0.0.1', 'port' => 3306, 'database' => 'mailling',

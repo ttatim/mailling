@@ -1,0 +1,13 @@
+<?php
+declare(strict_types=1);
+namespace App\Models\Repositories;
+use PDO;
+final class ContactRepository {
+ public function __construct(private PDO $db) {}
+ public function addMany(int $userId,array $emails,string $source): array {$this->db->beginTransaction();$added=0;$skip=0;$supp=$this->db->prepare('SELECT 1 FROM global_suppression_list WHERE email_hash=:hash');$ins=$this->db->prepare("INSERT IGNORE INTO contacts(user_id,email,source,unsubscribe_token) VALUES(:user,:email,:source,:token)");try{foreach($emails as $email){$supp->execute(['hash'=>hash('sha256',$email)]);if($supp->fetchColumn()){$skip++;continue;}$ins->execute(['user'=>$userId,'email'=>$email,'source'=>$source,'token'=>bin2hex(random_bytes(32))]);$added+=$ins->rowCount();}$this->db->commit();return[$added,$skip];}catch(\Throwable $e){$this->db->rollBack();throw $e;}}
+ public function list(int $userId,string $q,int $page=1):array{$s=$this->db->prepare("SELECT SQL_CALC_FOUND_ROWS * FROM contacts WHERE user_id=:user AND email LIKE :q ORDER BY id DESC LIMIT 25 OFFSET :offset");$s->bindValue('user',$userId,PDO::PARAM_INT);$s->bindValue('q','%'.$q.'%');$s->bindValue('offset',max(0,$page-1)*25,PDO::PARAM_INT);$s->execute();return['rows'=>$s->fetchAll(),'total'=>(int)$this->db->query('SELECT FOUND_ROWS()')->fetchColumn()];}
+ public function delete(int $id,int $user):void{$s=$this->db->prepare('DELETE FROM contacts WHERE id=:id AND user_id=:user');$s->execute(['id'=>$id,'user'=>$user]);}
+ public function stats(int $user):array{$s=$this->db->prepare("SELECT COUNT(*) total,SUM(status='active') active FROM contacts WHERE user_id=:id");$s->execute(['id'=>$user]);return$s->fetch()?:['total'=>0,'active'=>0];}
+ public function optOut(string $token,?string $reason):string{$this->db->beginTransaction();try{$s=$this->db->prepare('SELECT * FROM contacts WHERE unsubscribe_token=:token FOR UPDATE');$s->execute(['token'=>$token]);$c=$s->fetch();if(!$c){$this->db->commit();return 'unknown';}$i=$this->db->prepare('INSERT IGNORE INTO global_suppression_list(email,email_hash,reason,source_contact_id) VALUES(:email,:hash,:reason,:id)');$i->execute(['email'=>$c['email'],'hash'=>hash('sha256',$c['email']),'reason'=>$reason,'id'=>$c['id']]);$u=$this->db->prepare("UPDATE contacts SET status='unsubscribed',unsubscribed_at=NOW() WHERE id=:id AND status='active'");$u->execute(['id'=>$c['id']]);$this->db->commit();return $u->rowCount()?'done':'already';}catch(\Throwable $e){$this->db->rollBack();throw $e;}}
+ public function byToken(string $token):?array{$s=$this->db->prepare('SELECT email,status FROM contacts WHERE unsubscribe_token=:token');$s->execute(['token'=>$token]);return$s->fetch()?:null;}
+}
