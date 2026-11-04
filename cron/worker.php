@@ -7,6 +7,9 @@ require dirname(__DIR__) . '/app/Core/Autoloader.php';
 
 $config = require dirname(__DIR__) . '/config.php';
 $db = \App\Core\Database::connect($config);
+(new \App\Services\AccountLifecycle($db))->notifyUpcoming();
+(new \App\Services\AccountLifecycle($db))->closeDue();
+(new \App\Services\AccountLifecycle($db))->closeSingleUse();
 // Lock a single due batch; SKIP LOCKED lets concurrent cron invocations coexist safely.
 $db->beginTransaction();
 $batch = $db->query("SELECT * FROM campaign_batches WHERE status='pending' AND scheduled_at<=NOW() ORDER BY scheduled_at LIMIT 1 FOR UPDATE SKIP LOCKED")->fetch();

@@ -15,5 +15,5 @@ return [
         'username' => 'root', 'password' => '', 'charset' => 'utf8mb4',
     ],
     'security' => ['session_name' => 'mailling_session'],
-    'billing' => ['gateway' => 'mercado_pago', 'access_token' => 'TEST-CHANGE-ME', 'webhook_secret' => 'CHANGE-ME'],
+    'billing' => ['gateway' => 'pagseguro', 'environment' => 'sandbox', 'token' => 'CHANGE-ME', 'webhook_secret' => 'CHANGE-ME'],
 ];
