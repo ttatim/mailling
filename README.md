@@ -21,10 +21,13 @@ Micro SaaS de e-mail marketing em PHP 8.3 puro, sem framework, Composer ou depen
 1. Copie `config.example.php` para `config.php` e preencha credenciais.
 2. Crie o banco com charset `utf8mb4`.
 3. Execute `mysql -u USUARIO -p BANCO < migrations/001_initial_schema.sql`.
-4. Para desenvolvimento: `php -S localhost:8000` na raiz.
+4. Execute `mysql -u USUARIO -p BANCO < migrations/002_admin_billing.sql` e crie o super-admin localmente: `ADMIN_PASSWORD='sua-senha' php scripts/create-super-admin.php`.
+5. Para desenvolvimento: `php -S localhost:8000` na raiz.
 
 Requisitos: PHP 8.3, MySQL 8.0+, extensões `pdo_mysql`, `openssl`, `zip` e `curl`.
 
 Execute `php tests/run.php` para os testes sem PHPUnit. Para o worker: `* * * * * php /caminho/cron/worker.php`.
+
+O super-admin inicial é criado pelo seed e acessa `/admin`. A URL de callback é `POST /webhooks/pagamentos`; ela requer o cabeçalho `X-Webhook-Signature` com HMAC-SHA256 do corpo usando `billing.webhook_secret`. Eventos aprovados desbloqueiam automaticamente o usuário relacionado à referência de pagamento.
 
 O visual é inspirado na organização de painel do Sufee, porém foi implementado com HTML/CSS próprios, evitando dependências externas. Importadores binários DOC/XLS e PDFs complexos têm limitação deliberada: extraem texto bruto/fluxos simples; DOCX/XLSX usam XML do ZIP.

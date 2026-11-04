@@ -1,0 +1,3 @@
+-- Do not store credentials in source control.
+-- Create the first super-admin locally after migrations:
+-- ADMIN_PASSWORD='your-password' php scripts/create-super-admin.php
