@@ -24,6 +24,7 @@ $router->get('/ativar',[$app,'activate']);
 $router->get('/health',[$health,'check']);
 $router->get('/painel',[$app,'dashboard']);$router->get('/contatos',[$app,'contacts']);$router->post('/contatos/importar',[$app,'import']);$router->post('/contatos/excluir',[$app,'deleteContact']);
 $router->get('/planos',[$app,'plans']);$router->post('/checkout',[$app,'checkout']);
+$router->get('/notificacoes',[$app,'notifications']);
 $router->get('/contatos/exportar',[$app,'exportContacts']);
 $router->get('/configuracoes',[$app,'settings']);$router->post('/configuracoes/cancelar',[$app,'cancel']);
 $router->post('/configuracoes/smtp',[$app,'senderSave']);
