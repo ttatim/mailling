@@ -19,10 +19,12 @@ header('X-Content-Type-Options: nosniff'); header('X-Frame-Options: DENY'); head
 $app = new AppController(); $router = new Router();
 $health = new HealthController($config);
 $router->get('/', [$app,'home']); $router->get('/login',[$app,'loginForm']);$router->post('/login',[$app,'login']);$router->get('/cadastro',[$app,'registerForm']);$router->post('/cadastro',[$app,'register']);$router->post('/sair',[$app,'logout']);
+$router->get('/termos',[$app,'terms']);$router->get('/privacidade',[$app,'privacy']);
 $router->get('/esqueci-senha',[$app,'forgotForm']);$router->post('/esqueci-senha',[$app,'forgot']);$router->get('/redefinir',[$app,'resetForm']);$router->post('/redefinir',[$app,'reset']);
 $router->get('/ativar',[$app,'activate']);
 $router->get('/health',[$health,'check']);
 $router->get('/painel',[$app,'dashboard']);$router->get('/contatos',[$app,'contacts']);$router->post('/contatos/importar',[$app,'import']);$router->post('/contatos/excluir',[$app,'deleteContact']);
+$router->post('/contatos/excluir-em-massa',[$app,'deleteContacts']);$router->get('/campanhas/status',[$app,'campaignDashboard']);
 $router->get('/planos',[$app,'plans']);$router->post('/checkout',[$app,'checkout']);
 $router->get('/notificacoes',[$app,'notifications']);
 $router->get('/contatos/exportar',[$app,'exportContacts']);
