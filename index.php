@@ -19,6 +19,7 @@ Session::start($config['security']['session_name']);
 header('X-Content-Type-Options: nosniff'); header('X-Frame-Options: DENY'); header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'");
 $app = new AppController(); $router = new Router();
 $router->before([$app,'enforceAccess']);
+$router->onError(static function(int $status,string $message,$request) use($config): void { try{(new \App\Services\ErrorReporter(\App\Core\Database::connect($config),$config))->report($status,new \RuntimeException($message));}catch(\Throwable){} http_response_code($status);header('Content-Type: text/html; charset=UTF-8');echo '<!doctype html><title>Página indisponível</title><main><h1>Não encontramos esta página</h1><p>O ocorrido foi registrado. Volte ao painel ou tente novamente.</p></main>';exit;});
 $health = new HealthController($config);
 $router->get('/', [$app,'home']); $router->get('/login',[$app,'loginForm']);$router->post('/login',[$app,'login']);$router->get('/cadastro',[$app,'registerForm']);$router->post('/cadastro',[$app,'register']);$router->post('/sair',[$app,'logout']);
 $router->get('/termos',[$app,'terms']);$router->get('/privacidade',[$app,'privacy']);
