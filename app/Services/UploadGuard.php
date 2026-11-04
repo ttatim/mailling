@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);
+namespace App\Services;
+final class UploadGuard {public const LIST_MIMES=['text/plain','text/csv','application/pdf','application/msword','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];public function storeList(array $file,string $dir):array{if(($file['error']??4)!==0||($file['size']??0)>5242880)throw new \RuntimeException('Arquivo inválido ou maior que 5 MB.');$mime=(new \finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);if(!in_array($mime,self::LIST_MIMES,true))throw new \RuntimeException('Tipo de arquivo não permitido.');if(!is_dir($dir))mkdir($dir,0700,true);$path=$dir.'/'.bin2hex(random_bytes(16)).'.'.strtolower(pathinfo($file['name'],PATHINFO_EXTENSION));if(!move_uploaded_file($file['tmp_name'],$path))throw new \RuntimeException('Falha ao armazenar arquivo.');return[$path,$mime];}}
